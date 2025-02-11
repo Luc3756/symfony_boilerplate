@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Security\Voter\ProductVoter;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,6 +30,7 @@ final class ProductController extends AbstractController
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
+        $this->denyAccessUnlessGranted(ProductVoter::CREATE, $product);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($product);
             $entityManager->flush();
@@ -56,6 +58,7 @@ final class ProductController extends AbstractController
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
+        $this->denyAccessUnlessGranted(ProductVoter::EDIT, $product);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
@@ -71,6 +74,7 @@ final class ProductController extends AbstractController
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted(ProductVoter::DELETE, $product);
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($product);
             $entityManager->flush();

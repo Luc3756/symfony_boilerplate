@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Security\Voter\ProductVoter;
+use App\Service\ProductCsvExporte;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -83,5 +84,10 @@ final class ProductController extends AbstractController
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    #[Route('/export/csv', name: 'app_product_export_csv', methods: ['GET'])]
+    public function exportCsv(ProductCsvExporte $csvExporter): Response
+    {
+        return $csvExporter->export();
+    }
     
 }

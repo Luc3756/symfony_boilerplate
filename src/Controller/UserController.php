@@ -20,6 +20,9 @@ final class UserController extends AbstractController
     #[Route(name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        $this->denyAccessUnlessGranted(UserVoter::VIEW, $user);
         return $this->render('user/index.html.twig', [
             'users' => $userRepository->findAll(),
         ]);

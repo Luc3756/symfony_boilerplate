@@ -12,10 +12,11 @@ class ClientVoter extends Voter
     const EDIT = 'edit';
     const DELETE = 'delete';
     const CREATE = 'create';
+    const VIEW = 'view';
 
     protected function supports(string $attribute, $subject): bool
     {
-        return in_array($attribute, [self::EDIT, self::DELETE, self::CREATE]) && $subject instanceof Client;
+        return in_array($attribute, [self::EDIT, self::DELETE, self::CREATE, self::VIEW]) && $subject instanceof Client;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool

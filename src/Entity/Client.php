@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ClientRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client
@@ -13,15 +15,29 @@ class Client
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: 'Le prénom ne peut pas être vide.')]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-ZÀ-ÿ\- ]+$/",
+        message: "Le prénom ne peut contenir que des lettres, des espaces et des tirets."
+    )]
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
+    #[Assert\NotBlank(message: 'Le nom ne peut pas être vide.')]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-ZÀ-ÿ\- ]+$/",
+        message: "Le nom ne peut contenir que des lettres, des espaces et des tirets."    
+        )]
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
+    #[Assert\NotBlank(message: "L'email est obligatoire.")]
+    #[Assert\Email(message: "L'email doit être valide.")]
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
+    #[Assert\NotBlank(message: "Le numéro de téléphone est obligatoire.")]
+    #[Assert\Regex(pattern:"/^[0-9]*$/", message:"Nombre uniquement")]
     #[ORM\Column(length: 20)]
     private ?string $phoneNumber = null;
 

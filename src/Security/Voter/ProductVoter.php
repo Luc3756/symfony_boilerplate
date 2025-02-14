@@ -36,6 +36,8 @@ class ProductVoter extends Voter
 
     private function isAdmin(UserInterface $user): bool
     {
-        return in_array('ROLE_ADMIN', $user->getRoles());
+        return in_array('ROLE_ADMIN', $user->getRoles()) || 
+               in_array('ROLE_MANAGER', $user->getRoles()) || 
+               in_array('ROLE_USER', $user->getRoles());
     }
 }
